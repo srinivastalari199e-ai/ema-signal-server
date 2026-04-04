@@ -16,7 +16,7 @@ def home():
 def get_signal():
     return latest_signal
 
-@app.post("/update")
+@app.get("/update")
 def update_signal(index: str, signal: str, price: float):
     global latest_signal
     latest_signal = {
