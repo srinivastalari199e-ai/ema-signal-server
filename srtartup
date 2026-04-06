@@ -1,0 +1,6 @@
+@app.on_event("startup")
+def start_thread():
+    import threading
+    thread = threading.Thread(target=calculate_signal)
+    thread.daemon = True
+    thread.start()
