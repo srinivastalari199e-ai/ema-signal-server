@@ -1,54 +1,23 @@
 from fastapi import FastAPI
-import yfinance as yf
 
 app = FastAPI()
 
-# Store latest signal
 latest_signal = {
     "index": "NIFTY",
     "signal": "WAIT",
     "price": 0
 }
 
-# ✅ Root check
 @app.get("/")
 def home():
     return {"status": "running"}
 
-# ✅ Get signal
+# ✅ Always return latest signal (NO external API)
 @app.get("/signal")
 def get_signal():
-    global latest_signal
+    return latest_signal
 
-    try:
-        # Fetch NIFTY data
-        symbol = "^NSEI"
-        data = yf.download(symbol, period="1d", interval="5m")
-
-        if data is None or data.empty:
-            return {"error": "No market data"}
-
-        # Get latest price
-        last_close = float(data['Close'].iloc[-1])
-
-        # Simple logic (you can upgrade later)
-        if last_close > 0:
-            signal = "BUY"
-        else:
-            signal = "SELL"
-
-        latest_signal = {
-            "index": "NIFTY",
-            "signal": signal,
-            "price": last_close
-        }
-
-        return latest_signal
-
-    except Exception as e:
-        return {"error": str(e)}
-
-# ✅ Manual update (for testing / webhook)
+# ✅ Update signal (THIS is your main entry)
 @app.get("/update")
 def update_signal(index: str, signal: str, price: float):
     global latest_signal
@@ -59,4 +28,4 @@ def update_signal(index: str, signal: str, price: float):
         "price": price
     }
 
-    return {"status": "updated"}
+    return {"status": "updated", "data": latest_signal}
