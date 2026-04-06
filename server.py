@@ -1,31 +1,42 @@
 from fastapi import FastAPI
+import requests
 
 app = FastAPI()
 
-latest_signal = {
+# 👉 PASTE YOUR DETAILS HERE
+TELEGRAM_TOKEN = "PASTE_YOUR_TOKEN"
+CHAT_ID = "PASTE_YOUR_CHAT_ID"
+
+data_store = {
     "index": "NIFTY",
     "signal": "WAIT",
     "price": 0
 }
 
+def send_telegram_message(message):
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+    payload = {
+        "chat_id": CHAT_ID,
+        "text": message
+    }
+    requests.post(url, data=payload)
+
 @app.get("/")
 def home():
     return {"status": "running"}
 
-# ✅ Always return latest signal (NO external API)
 @app.get("/signal")
 def get_signal():
-    return latest_signal
+    return data_store
 
-# ✅ Update signal (THIS is your main entry)
 @app.get("/update")
-def update_signal(index: str, signal: str, price: float):
-    global latest_signal
+def update(index: str, signal: str, price: float):
+    data_store["index"] = index
+    data_store["signal"] = signal
+    data_store["price"] = price
 
-    latest_signal = {
-        "index": index,
-        "signal": signal,
-        "price": price
-    }
+    # 🚨 SEND TELEGRAM ALERT
+    msg = f"{index} {signal} @ {price}"
+    send_telegram_message(msg)
 
-    return {"status": "updated", "data": latest_signal}
+    return {"status": "updated", "data": data_store}
