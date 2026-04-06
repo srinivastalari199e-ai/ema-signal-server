@@ -19,10 +19,11 @@ def get_signal():
 
         data['EMA7'] = data['Close'].ewm(span=7).mean()
 
-        last = data.iloc[-1]
+        last_close = data['Close'].iloc[-1]
+        last_ema = data['EMA7'].iloc[-1]
 
-        price = float(last['Close'])
-        ema = float(last['EMA7'])
+        price = float(last_close)
+        ema = float(last_ema)
 
         if price > ema:
             signal = "BUY"
