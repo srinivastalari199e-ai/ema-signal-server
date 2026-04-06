@@ -1,0 +1,36 @@
+def calculate_signal():
+    global latest_signal
+
+    while True:
+        try:
+            data = yf.download("^NSEI", interval="15m", period="2d")
+
+            if data.empty:
+                print("No data received")
+                time.sleep(60)
+                continue
+
+            data['EMA7'] = data['Close'].ewm(span=7).mean()
+
+            last = data.iloc[-1]
+
+            price = float(last['Close'])
+            ema = float(last['EMA7'])
+
+            if price > ema:
+                signal = "BUY"
+            else:
+                signal = "SELL"
+
+            latest_signal = {
+                "index": "NIFTY",
+                "signal": signal,
+                "price": price
+            }
+
+            print("Updated:", latest_signal)
+
+        except Exception as e:
+            print("Error:", e)
+
+        time.sleep(60)
