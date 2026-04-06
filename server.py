@@ -17,13 +17,13 @@ def get_signal():
         if data.empty:
             return {"error": "No market data"}
 
-        data['EMA7'] = data['Close'].ewm(span=7).mean()
+        data["EMA7"] = data["Close"].ewm(span=7).mean()
 
-       last_close = data['Close'].iloc[-1]
-last_ema = data['EMA7'].iloc[-1]
+        last_close = data["Close"].iloc[-1]
+        last_ema = data["EMA7"].iloc[-1]
 
-price = float(last_close)
-ema = float(last_ema)
+        price = float(last_close)
+        ema = float(last_ema)
 
         if price > ema:
             signal = "BUY"
