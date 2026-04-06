@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 app = FastAPI()
 
@@ -16,12 +16,10 @@ def home():
 def get_signal():
     return latest_signal
 
-@app.get("/update")
-def update_signal(index: str, signal: str, price: float):
+@app.post("/update")
+async def update_signal(request: Request):
     global latest_signal
-    latest_signal = {
-        "index": index,
-        "signal": signal,
-        "price": price
-    }
+    data = await request.json()
+    latest_signal = data
+    print("Received:", data)  # helps debug
     return {"status": "updated"}
