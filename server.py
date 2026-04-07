@@ -5,7 +5,7 @@ app = FastAPI()
 
 # 👉 PASTE YOUR DETAILS HERE
 TELEGRAM_TOKEN = "PASTE_YOUR_TOKEN"
-CHAT_ID = "PASTE_YOUR_CHAT_ID"
+CHAT_ID = "8530450406"
 
 data_store = {
     "index": "NIFTY",
