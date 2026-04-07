@@ -4,7 +4,7 @@ import requests
 app = FastAPI()
 
 # 👉 PASTE YOUR DETAILS HERE
-TELEGRAM_TOKEN = "PASTE_YOUR_TOKEN"
+TELEGRAM_TOKEN = "8530450406"
 CHAT_ID = "8530450406"
 
 data_store = {
